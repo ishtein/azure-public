@@ -2,7 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "adminUsername": {
+      "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Machine name."
+      }
+  },
+  "adminUsername": {
       "type": "string",
       "metadata": {
         "description": "Username for the Virtual Machine."
@@ -12,12 +18,6 @@
       "type": "securestring",
       "metadata": {
         "description": "Password for the Virtual Machine."
-      }
-    },
-    "dnsLabelPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
       }
     },
     "windowsOSVersion": {
@@ -37,14 +37,14 @@
     }
   },
   "variables": {
+    "dnsLabelPrefix": "[concat(parameters('vmName'), '-dns')]",
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
-    "nicName": "myVMNic",
+    "nicName": "[concat(parameters('vmName'), '-nic')]",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
-    "publicIPAddressName": "myPublicIP",
-    "vmName": "SimpleWinVM",
-    "virtualNetworkName": "MyVNET",
+    "publicIPAddressName": "[concat(parameters('vmName'), '-ip')]",
+    "virtualNetworkName": "[concat(parameters('vmName'), '-vnet')]",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
   "resources": [
@@ -67,7 +67,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
+          "domainNameLabel": "[variables('dnsLabelPrefix')]"
         }
       }
     },
@@ -121,7 +121,7 @@
     {
       "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[variables('vmName')]",
+      "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
@@ -129,10 +129,10 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_A2"
+          "vmSize": "Basic_A0"
         },
         "osProfile": {
-          "computerName": "[variables('vmName')]",
+          "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
