@@ -14,6 +14,12 @@
         "description": "Username for the Virtual Machine."
       }
     },
+    "dnsLabelPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS Label Prefix."
+      }
+    },
     "adminPassword": {
       "type": "securestring",
       "metadata": {
@@ -37,7 +43,6 @@
     }
   },
   "variables": {
-    "dnsLabelPrefix": "[concat(parameters('vmName'), '-dns')]",
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
     "nicName": "[concat(parameters('vmName'), '-nic')]",
     "addressPrefix": "10.0.0.0/16",
@@ -67,7 +72,7 @@
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-          "domainNameLabel": "[variables('dnsLabelPrefix')]"
+          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
         }
       }
     },
