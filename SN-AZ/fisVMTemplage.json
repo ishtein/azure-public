@@ -2,12 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "disks_vlmasnowrhel7_data_name": {
-            "defaultValue": "vlmazcalvin2-data",
-            "type": "String"
-        },
-        "disks_vlmasnowrhel7_os_name": {
-            "defaultValue": "vlmazcalvin2-os",
+        "vm_name": {
             "type": "String"
         },
         "disks_vlmazsnowwin2012_data_name": {
@@ -22,16 +17,8 @@
             "defaultValue": "vwmazopsmgmt-data",
             "type": "String"
         },
-        "virtualMachines_vlmasnowrhel7_name": {
-            "defaultValue": "vlmazcalvin2",
-            "type": "String"
-        },
         "virtualMachines_vlmazsnowwin2012_name": {
             "defaultValue": "vlmazsnowwin2012",
-            "type": "String"
-        },
-        "networkInterfaces_vlmasnowrhel7_nic_name": {
-            "defaultValue": "vlmazcalvin2-nic",
             "type": "String"
         },
         "networkInterfaces_vlmazorigin_nic_name": {
@@ -71,12 +58,17 @@
             "type": "String"
         }
     },
-    "variables": {},
+    "variables": {
+        "virtualMachines_vlmasnowrhel7_name": "[parameters('vm_name')]",
+        "disks_vlmasnowrhel7_data_name": "[concat(parameters('vm_name'), '-data')]",
+        "disks_vlmasnowrhel7_os_name": "[concat(parameters('vm_name'), '-os')]",
+        "networkInterfaces_vlmasnowrhel7_nic_name": "[concat(parameters('vm_name'), '-nic')]"
+    },
     "resources": [
         {
             "comments": "Generalized from resource: '/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SNOW-SSP-3002.501000.9340/providers/Microsoft.Compute/disks/vlmasnowrhel7-data'.",
             "type": "Microsoft.Compute/disks",
-            "name": "[parameters('disks_vlmasnowrhel7_data_name')]",
+            "name": "[variables('disks_vlmasnowrhel7_data_name')]",
             "apiVersion": "2016-04-30-preview",
             "location": "eastus2",
             "scale": null,
@@ -92,7 +84,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SNOW-SSP-3002.501000.9340/providers/Microsoft.Compute/disks/vlmasnowrhel7-os'.",
             "type": "Microsoft.Compute/disks",
-            "name": "[parameters('disks_vlmasnowrhel7_os_name')]",
+            "name": "[variables('disks_vlmasnowrhel7_os_name')]",
             "apiVersion": "2016-04-30-preview",
             "location": "eastus2",
             "scale": null,
@@ -158,7 +150,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SNOW-SSP-3002.501000.9340/providers/Microsoft.Compute/virtualMachines/vlmasnowrhel7'.",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('virtualMachines_vlmasnowrhel7_name')]",
+            "name": "[variables('virtualMachines_vlmasnowrhel7_name')]",
             "apiVersion": "2016-04-30-preview",
             "location": "eastus2",
             "tags": {},
@@ -170,21 +162,21 @@
                 "storageProfile": {
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachines_vlmasnowrhel7_name'),'-os')]",
+                        "name": "[concat(variables('virtualMachines_vlmasnowrhel7_name'),'-os')]",
                         "createOption": "Attach",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "id": "[resourceId('Microsoft.Compute/disks', parameters('disks_vlmasnowrhel7_os_name'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks', variables('disks_vlmasnowrhel7_os_name'))]"
                         }
                     },
                     "dataDisks": [
                         {
                             "lun": 0,
-                            "name": "[concat(parameters('virtualMachines_vlmasnowrhel7_name'),'-data')]",
+                            "name": "[concat(variables('virtualMachines_vlmasnowrhel7_name'),'-data')]",
                             "createOption": "Attach",
                             "caching": "None",
                             "managedDisk": {
-                                "id": "[resourceId('Microsoft.Compute/disks', parameters('disks_vlmasnowrhel7_data_name'))]"
+                                "id": "[resourceId('Microsoft.Compute/disks', variables('disks_vlmasnowrhel7_data_name'))]"
                             }
                         }
                     ]
@@ -192,7 +184,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vlmasnowrhel7_nic_name'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_vlmasnowrhel7_nic_name'))]"
                         }
                     ]
                 },
@@ -204,9 +196,9 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/disks', parameters('disks_vlmasnowrhel7_os_name'))]",
-                "[resourceId('Microsoft.Compute/disks', parameters('disks_vlmasnowrhel7_data_name'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_vlmasnowrhel7_nic_name'))]",
+                "[resourceId('Microsoft.Compute/disks', variables('disks_vlmasnowrhel7_os_name'))]",
+                "[resourceId('Microsoft.Compute/disks', variables('disks_vlmasnowrhel7_data_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_vlmasnowrhel7_nic_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_snowsspstorage_name'))]"
             ]
         },
@@ -269,7 +261,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SNOW-SSP-3002.501000.9340/providers/Microsoft.Network/networkInterfaces/vlmasnowrhel7-nic'.",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('networkInterfaces_vlmasnowrhel7_nic_name')]",
+            "name": "[variables('networkInterfaces_vlmasnowrhel7_nic_name')]",
             "apiVersion": "2017-03-01",
             "location": "eastus2",
             "scale": null,
