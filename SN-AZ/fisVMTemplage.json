@@ -13,16 +13,8 @@
             "defaultValue": "vlmazsnowwin2012-os",
             "type": "String"
         },
-        "disks_vwmazopsmgmt_data_name": {
-            "defaultValue": "vwmazopsmgmt-data",
-            "type": "String"
-        },
         "virtualMachines_vlmazsnowwin2012_name": {
             "defaultValue": "vlmazsnowwin2012",
-            "type": "String"
-        },
-        "networkInterfaces_vlmazorigin_nic_name": {
-            "defaultValue": "vlmazorigin-nic",
             "type": "String"
         },
         "networkInterfaces_vlmazsnowwin2012_nic_name": {
@@ -47,10 +39,6 @@
         },
         "networkInterfaces_vlmasnowrhel7_nic_id": {
             "defaultValue": "/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SDL-INFRASTRUCTURE/providers/Microsoft.Network/virtualNetworks/SDL-INFRASTRUCTURE-VNET/subnets/SDL-SSP-SNET",
-            "type": "String"
-        },
-        "networkInterfaces_vlmazorigin_nic_id": {
-            "defaultValue": "/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SDL-INFRASTRUCTURE/providers/Microsoft.Network/virtualNetworks/SDL-INFRASTRUCTURE-VNET/subnets/SDL-TOOLS-SNET",
             "type": "String"
         },
         "networkInterfaces_vlmazsnowwin2012_nic_id": {
@@ -128,22 +116,6 @@
                     "sourceUri": "[parameters('disks_vlmazsnowwin2012_os_sourceUri')]"
                 },
                 "diskSizeGB": 80
-            },
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/e88b8764-b0ec-47ec-8471-bc406a469fa9/resourceGroups/SNOW-SSP-3002.501000.9340/providers/Microsoft.Compute/disks/vwmazopsmgmt-data'.",
-            "type": "Microsoft.Compute/disks",
-            "name": "[parameters('disks_vwmazopsmgmt_data_name')]",
-            "apiVersion": "2016-04-30-preview",
-            "location": "eastus2",
-            "scale": null,
-            "properties": {
-                "accountType": "Standard_LRS",
-                "creationData": {
-                    "createOption": "Empty"
-                },
-                "diskSizeGB": 64
             },
             "dependsOn": []
         },
